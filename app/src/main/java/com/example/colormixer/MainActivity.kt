@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,17 +29,27 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ColorMixerApp() {
     var redSlider by remember { mutableIntStateOf(0) }
+    var greenSlider by remember { mutableIntStateOf(0) }
+    var blueSlider by remember { mutableIntStateOf(0) }
 
     ColorMixerScreen(
         redSlider = redSlider,
-        onRedChange = { redValue -> redSlider = redValue}
+        onRedChange = { redValue -> redSlider = redValue},
+        greenSlider = greenSlider,
+        onGreenChange = { greenValue -> greenSlider = greenValue},
+        blueSlider = blueSlider,
+        onBlueChange = { blueValue -> blueSlider = blueValue}
     )
 }
 
 @Composable
 fun ColorMixerScreen(
     redSlider:Int,
-    onRedChange: (Int) -> Unit
+    onRedChange: (Int) -> Unit,
+    greenSlider:Int,
+    onGreenChange: (Int) -> Unit,
+    blueSlider:Int,
+    onBlueChange: (Int) -> Unit,
 ){
     Column (
         modifier = Modifier
@@ -46,31 +57,43 @@ fun ColorMixerScreen(
             .padding(20.dp)
     ){
         Text("Color Mixer", style = MaterialTheme.typography.headlineMedium)
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text("Red", fontSize = 20.sp)
-            Text(redSlider.toString(), fontSize = 20.sp)
-        }
-        Slider (
-            value = redSlider.toFloat(),
-            onValueChange = { onRedChange(it.toInt())},
-            valueRange = 0f..255f,
-            steps = 253,
-            colors =  SliderDefaults.colors(
-                thumbColor = androidx.compose.ui.graphics.Color.Red,
-                activeTrackColor = androidx.compose.ui.graphics.Color.Red,
-                activeTickColor = androidx.compose.ui.graphics.Color.Red,
-                inactiveTrackColor = androidx.compose.ui.graphics.Color.LightGray,
-                inactiveTickColor = androidx.compose.ui.graphics.Color.LightGray,
-                disabledThumbColor =androidx.compose.ui.graphics.Color.LightGray,
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
+
+        SliderComponent(redSlider, onRedChange, Color.Red, "Red")
+        SliderComponent(greenSlider, onGreenChange, Color.Green, "Green")
+        SliderComponent(blueSlider, onBlueChange, Color.Blue, "Blue")
     }
+}
+
+@Composable
+fun SliderComponent (
+    slider: Int,
+    onChange: (Int) -> Unit,
+    color: Color,
+    colorName: String
+){
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text(colorName, fontSize = 20.sp)
+        Text(slider.toString(), fontSize = 20.sp)
+    }
+    Slider (
+        value = slider.toFloat(),
+        onValueChange = { onChange(it.toInt())},
+        valueRange = 0f..255f,
+        steps = 253,
+        colors =  SliderDefaults.colors(
+            thumbColor = color,
+            activeTrackColor = color,
+            activeTickColor = color,
+            inactiveTrackColor = Color.LightGray,
+            inactiveTickColor = Color.LightGray
+        ),
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true)
@@ -79,7 +102,11 @@ fun GreetingPreview() {
     ColorMixerTheme {
         ColorMixerScreen(
             redSlider = 0,
-            onRedChange = {}
+            onRedChange = {},
+            greenSlider =0,
+            onGreenChange = {},
+            blueSlider = 0,
+            onBlueChange = {},
         )
     }
 }
