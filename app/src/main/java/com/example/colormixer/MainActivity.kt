@@ -1,13 +1,13 @@
 package com.example.colormixer
-
-import android.graphics.Paint.Align
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,7 +68,7 @@ fun ColorMixerScreen(
         ){
             Icon(
                 imageVector = Icons.Default.Palette,
-                contentDescription = "Email"
+                contentDescription = ""
             )
             Text(
                 "Color Mixer",
@@ -77,7 +77,21 @@ fun ColorMixerScreen(
             )
         }
 
-
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(Color(redSlider, greenSlider, blueSlider)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ){
+            Icon(
+                imageVector = Icons.Default.Tune,
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier.size(50.dp)
+            )
+        }
         SliderComponent(redSlider, onRedChange, Color.Red, "Red")
         SliderComponent(greenSlider, onGreenChange, Color.Green, "Green")
         SliderComponent(blueSlider, onBlueChange, Color.Blue, "Blue")
